@@ -1,0 +1,15 @@
+# Add content to .gitignore
+echo "*.pyc
+__pycache__/
+db.sqlite3
+.env
+.venv
+*.log
+.DS_Store
+*.sqlite3
+.vscode/
+.idea/
+env/
+venv/
+migrations/__pycache__/" > .gitignore
+
