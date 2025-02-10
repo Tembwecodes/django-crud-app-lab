@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Music App</title>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'song_index' %}">Songs</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'song_create' %}">Add Song</a>
+            <a href="{% url 'playlist_index' %}">My Playlists</a>
+            <span>Welcome, {{ user.username }}</span>
+            <a href="{% url 'logout' %}">Log Out</a>
+        {% else %}
+            <a href="{% url 'login' %}">Log In</a>
+            <a href="{% url 'signup' %}">Sign Up</a>
+        {% endif %}
+    </nav>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

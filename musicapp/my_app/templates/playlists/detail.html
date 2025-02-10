@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ playlist.name }}</h1>
+<p>{{ playlist.description }}</p>
+
+<div class="playlist-actions">
+    <a href="{% url 'playlist_update' pk=playlist.pk %}">Edit Playlist</a>
+    <form action="{% url 'playlist_delete' pk=playlist.pk %}" method="POST" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit">Delete Playlist</button>
+    </form>
+</div>
+
+<h2>Songs in Playlist</h2>
+{% for song in playlist.songs.all %}
+    <div class="song">
+        <h3>{{ song.title }}</h3>
+        <p>By {{ song.artist }}</p>
+        <form action="{% url 'remove_from_playlist' playlist_pk=playlist.pk song_pk=song.pk %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Remove from Playlist</button>
+        </form>
+    </div>
+{% empty %}
+    <p>No songs in this playlist yet!</p>
+{% endfor %}
+{% endblock %}

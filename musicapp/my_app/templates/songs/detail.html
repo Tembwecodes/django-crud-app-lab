@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ song.title }}</h1>
+<p>Artist: {{ song.artist }}</p>
+<p>Genre: {{ song.genre }}</p>
+<p>Release Date: {{ song.release_date }}</p>
+
+<a href="{% url 'song_update' pk=song.pk %}">Edit</a>
+<form action="{% url 'song_delete' pk=song.pk %}" method="GET" style="display: inline;">
+    <button type="submit">Delete</button>
+</form>
+
+<h2>Reviews</h2>
+<h3>Add to Playlist</h3>
+{% if user.is_authenticated %}
+    {% for playlist in user.playlist_set.all %}
+        <form action="{% url 'add_to_playlist' playlist_pk=playlist.pk song_pk=song.pk %}" method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Add to {{ playlist.name }}</button>
+        </form>
+    {% empty %}
+        <p>You don't have any playlists yet. <a href="{% url 'playlist_create' %}">Create one!</a></p>
+    {% endfor %}
+{% endif %}
+<a href="{% url 'review_create' song_pk=song.pk %}">Add Review</a>
+
+{% for review in song.reviews.all %}
+    <div class="review">
+        <p>Rating: {{ review.rating }}/5</p>
+        <p>{{ review.comment }}</p>
+        <p>Posted: {{ review.created_at }}</p>
+        <a href="{% url 'review_update' pk=review.pk %}">Edit</a>
+        <form action="{% url 'review_delete' pk=review.pk %}" method="POST" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+    </div>
+{% empty %}
+    <p>No reviews yet!</p>
+{% endfor %}
+{% endblock %}
